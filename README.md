@@ -3,43 +3,8 @@ database schema,
 data insertion script, and APIs, 
 followed by addressing the additional talking points.
 
-1. Database Schema (PostgreSQL)
-I ‘create tables for Grid, GridRegion, GridNode, and Measures with the specified relationships and timeseries evolution support.
--- Grid table
-CREATE TABLE Grid (
-    grid_id SERIAL PRIMARY KEY,
-    grid_name VARCHAR(50) NOT NULL UNIQUE
-);
+grid.db
 
--- GridRegion table (many-to-one with Grid)
-CREATE TABLE GridRegion (
-    region_id SERIAL PRIMARY KEY,
-    region_name VARCHAR(50) NOT NULL,
-    grid_id INTEGER NOT NULL,
-    FOREIGN KEY (grid_id) REFERENCES Grid(grid_id)
-);
-
--- GridNode table (many-to-one with GridRegion)
-CREATE TABLE GridNode (
-    node_id SERIAL PRIMARY KEY,
-    node_name VARCHAR(50) NOT NULL,
-    region_id INTEGER NOT NULL,
-    FOREIGN KEY (region_id) REFERENCES GridRegion(region_id)
-);
-
--- Measures table for timeseries data with evolution
-CREATE TABLE Measures (
-    measure_id SERIAL PRIMARY KEY,
-    node_id INTEGER NOT NULL,
-    timestamp_measured TIMESTAMP NOT NULL, -- The time the measurement is for
-    timestamp_collected TIMESTAMP NOT NULL, -- When the measurement was collected
-    value FLOAT NOT NULL,
-    FOREIGN KEY (node_id) REFERENCES GridNode(node_id),
-    UNIQUE (node_id, timestamp_measured, timestamp_collected)
-);
-
--- Index for performance on queries
-CREATE INDEX idx_measures_node_timestamp ON Measures(node_id, timestamp_measured, timestamp_collected);
 
 Explanation:
 •	Grid, GridRegion, and GridNode establish the hierarchy with foreign key relationships.
