@@ -1,0 +1,10 @@
+INSERT INTO GridMeasures (grid_id, timestamp_measured, timestamp_collected, value)
+SELECT 
+    gr.grid_id,
+    m.timestamp_measured,
+    m.timestamp_collected,
+    AVG(m.value) as value
+FROM Measures m
+JOIN GridNode n ON m.node_id = n.node_id
+JOIN GridRegion gr ON n.region_id = gr.region_id
+GROUP BY gr.grid_id, m.timestamp_measured, m.timestamp_collected;
