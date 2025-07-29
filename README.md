@@ -6,6 +6,7 @@ Notes
 
 •	The APIs assume FastAPI and psycopg2. 
 Install dependencies: 
+
 pip install fastapi uvicorn psycopg2-binary pydantic.
 
 •	Run APIs with 
